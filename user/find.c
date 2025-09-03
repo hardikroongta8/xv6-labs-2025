@@ -10,15 +10,12 @@ int main(int argc, char **argv) {
   if (argc < 3) {
     fprintf(2, "find: insufficient arguments\n");
   }
-  if (argc > 3) {
-    fprintf(2, "find: too many arguments\n");
-  }
 
   char *dirpath = argv[1];
   char *filename = argv[2];
 
   find(dirpath, filename);
-  return 0;
+  exit(0);
 }
 
 void find(char *dirpath, char *filename) {
@@ -49,6 +46,7 @@ void find(char *dirpath, char *filename) {
     close(fd);
     exit(-1);
   }
+
   strcpy(pathbuf, dirpath);
   ptr = pathbuf + strlen(pathbuf);
   *ptr++ = '/';
@@ -58,6 +56,7 @@ void find(char *dirpath, char *filename) {
         strcmp(dnt.name, "..") == 0) {
       continue;
     }
+
     memmove(ptr, dnt.name, DIRSIZ);
     ptr[DIRSIZ] = '\0';
     if (stat(pathbuf, &st) < 0) {
@@ -69,13 +68,10 @@ void find(char *dirpath, char *filename) {
       find(pathbuf, filename);
       continue;
     }
-    if (st.type == T_FILE) {
-      if (strcmp(filename, dnt.name) == 0) {
-        fprintf(1, "%s\n", pathbuf);
-      } else {
-        continue;
-      }
+    if (st.type == T_FILE && strcmp(filename, dnt.name) == 0) {
+      fprintf(1, "%s\n", pathbuf);
     }
-    continue;
   }
+
+  close(fd);
 }
