@@ -27,4 +27,3 @@ barrier
 *.pcap
 TAGS
 .vscode
-.clang-format
