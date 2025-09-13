@@ -254,7 +254,7 @@ int kfork(void) {
   *(np->trapframe) = *(p->trapframe);
 
   // copy sys_call_mask
-  np->context.sys_call_mask = p->context.sys_call_mask;
+  np->sys_call_mask = p->sys_call_mask;
 
   // Cause fork to return 0 in the child.
   np->trapframe->a0 = 0;

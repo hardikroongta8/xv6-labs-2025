@@ -121,12 +121,19 @@ void syscall(void) {
   if (num > 0 && num < NELEM(syscalls) && syscalls[num]) {
     // Use num to lookup the system call function for num, call it,
     // and store its return value in p->trapframe->a0
-    if (p->context.sys_call_mask & (1 << num)) {
-      printf("%d %s: forbidden sys call %d\n", p->pid, p->name, num);
+    if (p->sys_call_mask & (1 << num)) {
+      if (num == SYS_exec || num == SYS_open) {
+        char path[MAXPATH];
+        argstr(0, path, MAXPATH);
+        if (strncmp(p->allowed_pathname, path, MAXPATH) == 0) {
+          p->trapframe->a0 = syscalls[num]();
+          return;
+        }
+      }
       p->trapframe->a0 = -1;
-    } else {
-      p->trapframe->a0 = syscalls[num]();
+      return;
     }
+    p->trapframe->a0 = syscalls[num]();
   } else {
     printf("%d %s: unknown sys call %d\n", p->pid, p->name, num);
     p->trapframe->a0 = -1;
