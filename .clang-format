@@ -1,0 +1,10 @@
+SortIncludes: false
+AllowShortIfStatementsOnASingleLine: true
+AlignConsecutiveMacros: true
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+AlignArrayOfStructures: Left
+BinPackArguments: false
+BinPackParameters: false
+AllowAllArgumentsOnNextLine: false
+ColumnLimit: 0
